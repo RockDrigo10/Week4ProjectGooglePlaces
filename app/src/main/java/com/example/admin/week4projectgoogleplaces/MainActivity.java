@@ -1,12 +1,10 @@
 package com.example.admin.week4projectgoogleplaces;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -48,10 +46,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 10;
+    private static final String KEY_CAMERA_POSITION = "camera_position";
+    private static final String KEY_LOCATION = "location";
     private static final String TAG = "MainActivity";
     private static final String RADIUS = "2000";
+    private static final int PLACE_PICKER_REQUEST = 1;
     private SupportMapFragment mapFragment;
     public static final String GEO_KEY = "AIzaSyCMvzbX6qd30_zE3jXtHMFInk1Mn0QuwWU";
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -117,6 +118,13 @@ public class MainActivity extends AppCompatActivity  {
             }
         }
     }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -127,7 +135,7 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.btnRestaurant:
                 map.clear();
                 getGeocodeAddress("restaurant");
@@ -194,7 +202,7 @@ public class MainActivity extends AppCompatActivity  {
                         Log.d(TAG, "onFailure: " + e.toString());
                     }
                 });
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
     }
 
     public void getGeocodeAddress(String nearByPlace) {
@@ -263,6 +271,7 @@ public class MainActivity extends AppCompatActivity  {
             Toast.makeText(this, "Error - Map was null!!", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void getLocationInMap(String location, String name, boolean isSearch) {
         if (!location.equals("")) {
             Geocoder geocoder = new Geocoder(this);
